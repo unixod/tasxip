@@ -19,6 +19,7 @@ void MainWindow::_netSetup(){
 //PRIVATE METHODS--------------------------------------------------------------
 void MainWindow::_netCleanup(){
     delete dataParser;
+    delete req;
 }
 
 void MainWindow::_saveDumpedData(){
