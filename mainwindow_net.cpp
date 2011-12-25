@@ -42,11 +42,10 @@ void MainWindow::on_btnStart_clicked(){
 }
 
 void MainWindow::_sltReplyFinshed(QNetworkReply *reply){
-    QByteArray buf = reply->readAll();
 
-    if(!buf.isEmpty()){
+    if(reply->size() > 0){
         _sltLog(tr("Processing received data..."));
-        dataParser->parse(buf);
+        dataParser->parse(reply);
         _sltLog(tr("+-- parsed ip ranges count %1:").arg(dataParser->parsedCount()));
         _sltLog(tr("+-- output ip ranges count %1:").arg(dataParser->resultCount()));
 

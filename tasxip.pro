@@ -6,7 +6,7 @@
 
 QT       += core gui network
 
-TARGET = TasXIP
+TARGET = tasxip
 TEMPLATE = app
 
 

@@ -30,7 +30,7 @@
 #ifndef DATAPARSER_H
 #define DATAPARSER_H
 
-#include <QByteArray>
+#include <QIODevice>
 
 template<class> class RangeSet;
 
@@ -45,7 +45,7 @@ public:
     int resultCount() const;
     int parsedCount() const;
 
-    void parse(const QByteArray &arr);
+    void parse(QIODevice *);
     bool flushToFile(const QString &name) const;
 };
 
