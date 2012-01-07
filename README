@@ -1,0 +1,13 @@
+### TasXIP ###
+
+IP filters generator (Multi-Router Looking Glass (MRLG) output (ip bgp) parser).
+
+### About ###
+
+TasXIP is a simple web-dumping tool, that dump info from http://mrlg.tas-ix.uz/index.cgi, and make ipfilter file (p2p format) for programs like uTorrent, IP Blocker, etc.
+
+  ___   __
+  //_/\// 
+_// _//\\
+
+Copyright (C) 2011-2012, Eldar Zakirov <unixod@gmail.com>
