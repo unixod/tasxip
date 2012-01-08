@@ -18,29 +18,27 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-  DataParser - parse ip's ranges from input data stream;
-*/
+#ifndef DATADUMPER_H
+#define DATADUMPER_H
 
-#ifndef DATAPARSER_H
-#define DATAPARSER_H
-
-#include <QIODevice>
-
+class QString;
 template<class> class RangeSet;
 
-class DataParser{
-    RangeSet<unsigned int> *ipr;
-    int parsedCnt;
-    int resultCnt;
+class DataDumper{
 public:
-    DataParser(RangeSet<unsigned int> *iprs);
-//    ~DataParser();
+    enum Format{
+        SIMPLE,
+        P2P
+    };
 
-    int resultCount() const;
-    int parsedCount() const;
+    DataDumper(RangeSet<unsigned int> *iprs) : ipr(iprs){}
 
-    void parse(QIODevice *);
+    void setFormat(Format f){fmt = f;}
+    bool flushToFile(const QString &f_name) const;
+
+private:
+    RangeSet<unsigned int> *ipr;
+    Format fmt;
 };
 
-#endif // DATAPARSER_H
+#endif // DATADUMPER_H

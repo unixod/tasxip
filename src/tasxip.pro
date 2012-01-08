@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     mainwindow_net.cpp \
-    dataparser.cpp
+    dataparser.cpp \
+    datadumper.cpp
 
 HEADERS  += mainwindow.h \
     dataparser.h \
-    rangeset.h
+    rangeset.h \
+    datadumper.h
 
 FORMS    += mainwindow.ui
 

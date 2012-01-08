@@ -24,14 +24,11 @@
 #include <QFile>
 #include <QTextStream>
 
-DataParser::DataParser(){
-    parsedCnt = 0;
-    ipr = new RangeSet<unsigned int>;//(0x00000000, 0xffffffff);
-}
+DataParser::DataParser(RangeSet<unsigned int> *iprs) : ipr(iprs), parsedCnt(0){}
 
-DataParser::~DataParser(){
-    delete ipr;
-}
+//DataParser::~DataParser(){
+//    delete ipr;
+//}
 
 void DataParser::parse(QIODevice *data){
     QRegExp rx("^[^0-9]{3}(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})(\\/(\\d{1,2}))?", Qt::CaseInsensitive);
@@ -69,18 +66,3 @@ int DataParser::parsedCount() const {
     return parsedCnt;
 }
 
-#define IP4_TO_STR(_a) (_a >> 24) << '.' << ((_a >> 16) & 0xFF) << '.' << ((_a >> 8) & 0xFF) << '.' << (_a & 0xFF)
-bool DataParser::flushToFile(const QString &name) const {
-    QFile file(name);
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return false;
-
-    QTextStream out(&file);
-
-    RangeSet<unsigned int>::const_iterator i;
-    for(i = ipr->begin(); i != ipr->end(); ++i){
-        out << IP4_TO_STR(i->first) << " - " << IP4_TO_STR(i->second) << endl;
-    }
-
-    return true;
-}

@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>410</height>
+    <width>309</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TasXIP</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -63,6 +63,62 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QTextBrowser" name="txtbLog"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="gbCustomizations">
+      <property name="title">
+       <string>Customizations</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Filter format:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbtnFmtSimple">
+           <property name="text">
+            <string>Simple</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <attribute name="buttonGroup">
+            <string>bgrpFormats</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbtnFmtP2P">
+           <property name="text">
+            <string>P2P</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string>bgrpFormats</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>163</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -133,6 +189,8 @@ p, li { white-space: pre-wrap; }
    </attribute>
    <addaction name="actionLog"/>
    <addaction name="actionAbout"/>
+   <addaction name="separator"/>
+   <addaction name="actionCustomize"/>
   </widget>
   <action name="actionLog">
    <property name="checkable">
@@ -151,6 +209,14 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionCustomize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Customize</string>
    </property>
   </action>
  </widget>
@@ -184,8 +250,8 @@ p, li { white-space: pre-wrap; }
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>33</x>
-     <y>340</y>
+     <x>44</x>
+     <y>507</y>
     </hint>
    </hints>
   </connection>
@@ -200,8 +266,8 @@ p, li { white-space: pre-wrap; }
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>340</y>
+     <x>236</x>
+     <y>507</y>
     </hint>
    </hints>
   </connection>
@@ -216,10 +282,29 @@ p, li { white-space: pre-wrap; }
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>149</x>
-     <y>392</y>
+     <x>159</x>
+     <y>528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCustomize</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>gbCustomizations</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="bgrpFormats"/>
+ </buttongroups>
 </ui>

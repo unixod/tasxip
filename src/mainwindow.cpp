@@ -20,12 +20,21 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dataparser.h"
+#include "datadumper.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    dataParser = new DataParser(&ipr);
+    dataDumper = new DataDumper(&ipr);
+
+    _sltFilterFmtChanged(); //for initialize dataDumper format
+
+    connect(ui->bgrpFormats, SIGNAL(buttonClicked(int)), this, SLOT(_sltFilterFmtChanged()));
 
     //Ui Setup
     _uiSetup();
@@ -36,15 +45,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow(){
     delete ui;
+    delete dataParser;
+    delete dataDumper;
+
     _netCleanup();
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
 void MainWindow::_uiSetup(){
+    this->setWindowTitle("TasXIP v1.1.0");
+
     ui->gbLog->setHidden(true);
     ui->lbl_px->setHidden(true);
     ui->lbl_tasxip->setHidden(true);
     ui->lbl_bottom->setHidden(true);
+    ui->gbCustomizations->setHidden(true);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
     _changeUiState(Stopped);
 
@@ -86,4 +101,11 @@ void MainWindow::_sltDownloadProgress(qint64 val, qint64 total){
         ui->progressBar->setMaximum(total);
         ui->progressBar->setValue(val);
     }
+}
+
+void MainWindow::_sltFilterFmtChanged(){
+    QRadioButton *rbtn = qobject_cast<QRadioButton *>(ui->bgrpFormats->checkedButton());
+
+    if(rbtn == ui->rbtnFmtSimple) dataDumper->setFormat(DataDumper::SIMPLE);
+    else if(rbtn == ui->rbtnFmtP2P) dataDumper->setFormat(DataDumper::P2P);
 }

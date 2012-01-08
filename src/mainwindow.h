@@ -23,6 +23,7 @@
 
 #include <QMainWindow>
 #include <QtNetwork>
+#include "rangeset.h"
 
 namespace Ui {
     class MainWindow;
@@ -32,13 +33,17 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 class DataParser;
+class DataDumper;
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
     QNetworkAccessManager *nam;
     QNetworkRequest *req;
     QByteArray req_params;
+
     DataParser *dataParser;
+    DataDumper *dataDumper;
+    RangeSet<unsigned int> ipr;
 
     enum UiState{
         Stopped,
@@ -66,6 +71,7 @@ private slots:
     void _sltDownloadProgress(qint64, qint64);
     void _sltLog(const QString &);
     void _sltToolBarActions(QAction *);
+    void _sltFilterFmtChanged();
 };
 
 #endif // MAINWINDOW_H

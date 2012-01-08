@@ -21,11 +21,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dataparser.h"
+#include "datadumper.h"
 #include <QFileDialog>
 
 void MainWindow::_netSetup(){
-    dataParser = new DataParser;
-
     nam = new QNetworkAccessManager(this);
 
     //Request Setup
@@ -38,7 +37,6 @@ void MainWindow::_netSetup(){
 
 //PRIVATE METHODS--------------------------------------------------------------
 void MainWindow::_netCleanup(){
-    delete dataParser;
     delete req;
 }
 
@@ -46,7 +44,7 @@ void MainWindow::_saveDumpedData(){
     _sltLog(tr("Saving..."));
     QString dumpFileName = QFileDialog::getSaveFileName(this, "Save As:", "ipfilter.dat", "*.*");
     if(!dumpFileName.isEmpty()){
-        dataParser->flushToFile(dumpFileName);
+        dataDumper->flushToFile(dumpFileName);
         _sltLog(tr("Saved to: %1").arg(dumpFileName));
 
     } else _sltLog(tr("Saving canceled."));

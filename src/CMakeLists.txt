@@ -20,6 +20,7 @@ set(EXTRA_LIBS ${QT_LIBRARIES})
 #----------------------------------------------------------------------#
 
 set(tasxip_SOURCES
+	datadumper.cpp
 	dataparser.cpp
 	main.cpp
 	mainwindow.cpp
@@ -52,5 +53,5 @@ set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_BIN_DIR}
 		SKIP_BUILD_RPATH TRUE
-		VERSION "1.0.2"
+		VERSION "1.1.0"
 )
