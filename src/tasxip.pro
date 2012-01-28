@@ -23,6 +23,8 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+DEFINES += VERSION
+
 
 
 

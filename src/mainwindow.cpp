@@ -53,7 +53,7 @@ MainWindow::~MainWindow(){
 
 //PRIVATE METHODS--------------------------------------------------------------
 void MainWindow::_uiSetup(){
-    this->setWindowTitle("TasXIP v1.1.0");
+    this->setWindowTitle(QString("TasXIP %1").arg(VERSION));
 
     ui->gbLog->setHidden(true);
     ui->lbl_px->setHidden(true);
