@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/plugins">
+        <file>minimum_plg.js</file>
+        <file>multi_plg.js</file>
+    </qresource>
+</RCC>

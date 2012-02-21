@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/jshelper">
+        <file>jspluginsloader.js</file>
+    </qresource>
+</RCC>

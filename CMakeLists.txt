@@ -17,7 +17,7 @@ file(STRINGS
 #======================================================================#
 if(APP_VERSION)
 	add_definitions(-DVERSION="${APP_VERSION}")
-	add_subdirectory(src)
+	add_subdirectory(src/tasxip)
 else(APP_VERSION)
 	message(FATAL_ERROR
 		"Version number (in format MAJOR.MINOR.MICRO) must be specified in 'version' file."

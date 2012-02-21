@@ -18,17 +18,20 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QApplication>
-#include "mainwindow.h"
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    QCoreApplication::setOrganizationName("ProfX Software");
-    QCoreApplication::setOrganizationDomain("profx.zx6.ru");
-    QCoreApplication::setApplicationName("TaxXIP");
-    MainWindow w;
-    w.show();
-
-    return a.exec();
+function plugin(){
+    return {
+        name: "minimum_plg",
+        invoke: function(iprange){
+            var result = "minimum_plg:";
+            for(var i = 0; i < iprange.length; i++){
+                result += iprange[i].from + "-" + iprange[i].to + ";";
+            }
+            return result;
+        }
+    }
 }
+
+//JSPluginsLoader_Test TESTING
+//names_test, load_test
+var plugin_names = ["minimum_plg"]
+
