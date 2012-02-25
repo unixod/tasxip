@@ -25,6 +25,8 @@
 #include <QtNetwork>
 #include "rangeset.h"
 
+class PluginsProvider;
+
 namespace Ui {
     class MainWindow;
 }
@@ -45,13 +47,15 @@ class MainWindow : public QMainWindow{
     DataDumper *dataDumper;
     RangeSet<unsigned int> ipr;
 
+    PluginsProvider *plugins;
+
     enum UiState{
         Stopped,
         Processed
     };
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(PluginsProvider *, QWidget *parent = 0);
     ~MainWindow();
 
 private:

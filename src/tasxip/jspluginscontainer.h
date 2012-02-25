@@ -24,14 +24,16 @@
 #include "pluginsprovider.h"
 #include <QScriptEngine>
 #include <QMap>
+#include <map>
 
 class JSPluginsContainer : public PluginsProvider{
     typedef QString PluginFileName_t;
     typedef QString PluginName_t;
-    QMultiMap<PluginName_t, PluginFileName_t> plugins;
+//    QMultiMap<PluginName_t, PluginFileName_t> plugins;
+    std::multimap<PluginName_t, PluginFileName_t> plugins;
 public:
     //PluginsContainer implementation
-    bool add(const QString &f_name);
+    bool add(const QString &fName);
     QStringList names() const;
     Plugin * load(const QString &name, int idx = 0);
 };

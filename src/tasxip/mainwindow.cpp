@@ -22,8 +22,10 @@
 #include "ui_mainwindow.h"
 #include "dataparser.h"
 #include "datadumper.h"
+#include "pluginsprovider.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
+    plugins(plgProvider),
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {

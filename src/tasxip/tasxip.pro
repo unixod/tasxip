@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     datadumper.cpp \
     jspluginscontainer.cpp \
     jsplugin.cpp \
-    jspluginsloader.cpp
+    jspluginsloader.cpp \
+    pluginsengine.cpp
 
 HEADERS  += mainwindow.h \
     dataparser.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     plugin.h \
     jsplugin.h \
     jspluginsloader.h \
-    ipv6rangeset.h
+    ipv6rangeset.h \
+    pluginsengine.h
 
 FORMS    += mainwindow.ui
 

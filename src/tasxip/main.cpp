@@ -20,17 +20,25 @@
 
 #include <QtGui/QApplication>
 #include "mainwindow.h"
+#include "pluginsengine.h"
+#include <QDebug>
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
 
     QCoreApplication::setOrganizationName("Unixod");
     QCoreApplication::setOrganizationDomain("unixod.github.com");
-    QCoreApplication::setApplicationName("TaxXIP");
+    QCoreApplication::setApplicationName("tasxip");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
+    //Paths
+    QString appDir = QDir::homePath() + "/." + a.applicationName();
+    QString pluginsPath = appDir + "/plugins";
 
-    MainWindow w;
+    //Loading plugis
+    PluginsProvider *plgProvider = getPluginsProvider(pluginsPath);
+
+    MainWindow w(plgProvider);
     w.show();
 
     return a.exec();

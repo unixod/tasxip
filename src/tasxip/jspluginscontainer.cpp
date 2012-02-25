@@ -24,33 +24,46 @@
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
+#include <algorithm>
 
-bool JSPluginsContainer::add(const QString &f_name){
+bool JSPluginsContainer::add(const QString &fName){
     bool ret = false;
 
-    QFile file(f_name);
+    QFile file(fName);
     if(file.open(QIODevice::ReadOnly)){
         QTextStream in(&file);
 
         JSPluginsLoader ldr(in.readAll());
-        const QStringList names_lst = ldr.names();
+        const QStringList plgNames = ldr.names();
 
-        foreach(const QString &plg_name, names_lst){
-            plugins.insert(plg_name, f_name);
+        foreach(const QString &name, plgNames){
+            plugins.insert(std::make_pair(name, fName));
         }
 
-        ret = !names_lst.isEmpty();
+        ret = !plgNames.isEmpty();
     }
 
     return ret;
 }
 
 QStringList JSPluginsContainer::names() const {
-    return plugins.keys();
+    QStringList res;
+    std::multimap<PluginName_t, PluginFileName_t>::const_iterator i;
+    for(i = plugins.begin();i != plugins.end(); ++i)
+        res.append(i->first);
+    return res;
 }
 
 Plugin * JSPluginsContainer::load(const QString &name, int idx){
-    QStringList plg_files = plugins.values(name);
-    return idx < plg_files.size() ? new JSPlugin(plg_files[idx], name) : 0;
+    std::multimap<QString, QString>::const_iterator i = plugins.lower_bound(name);
+    std::multimap<QString, QString>::const_iterator end = plugins.upper_bound(name);
+
+    int plgIdx = 0;
+    for(std::map<QString, int> idxInFile; (i != end) && idx--; ++i)
+        if(plgIdx = idxInFile[i->second]) ++plgIdx;
+
+    return (i != end) ? new JSPlugin(i->second, name, plgIdx) : 0;
+    /*QStringList plg_files = plugins.values(name);
+    return idx < plg_files.size() ? new JSPlugin(plg_files[idx], name) : 0;*/
 }
 

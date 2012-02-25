@@ -44,13 +44,13 @@ qScriptRegisterMetaType(&en, paToScriptValue, paFromScriptValue);
 qScriptRegisterSequenceMetaType< std::list<Pa> >(&en);
 */
 
-JSPlugin::JSPlugin(const QString &f_name, const QString &name){
+JSPlugin::JSPlugin(const QString &fName, const QString &plgName, int idx){
 //    loader = new JSPluginsLoader();
-    QFile file(f_name);
+    QFile file(fName);
     if(file.open(QIODevice::ReadOnly)){
         QTextStream in(&file);
         loader = new JSPluginsLoader(in.readAll());
-        plugin = loader->load(name);
+        plugin = loader->load(plgName, idx);
         qScriptRegisterMetaType(loader->engine(), IPv6RangeSetToScriptValue, IPv6RangeSetFromScriptValue);
 
         //passed as the second parameter the plugin.invoke method (JS code)

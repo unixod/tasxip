@@ -29,7 +29,7 @@ class JSPluginsLoader;
 
 class JSPlugin : public Plugin{
 public:
-    JSPlugin(const QString &f_name, const QString &name);
+    JSPlugin(const QString &fName, const QString &plgName, int idx = 0);
     ~JSPlugin();
 
     //Plugin implementation

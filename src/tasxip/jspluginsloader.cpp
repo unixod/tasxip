@@ -37,17 +37,19 @@ JSPluginsLoader::JSPluginsLoader(const QScriptProgram &plugin){
 
 QStringList JSPluginsLoader::names() const {
     QScriptContext *ctx = eng.currentContext();
-    QScriptValue jsldr = ctx->activationObject().property("PluginsLoader").call();                  //var jsldr = PluginsLoader();
-    QStringList names_lst = qscriptvalue_cast<QStringList>(jsldr.property("names").call(jsldr));    //names_lst = jsldr.names();
-    return names_lst;
+    QScriptValue jsLdr = ctx->activationObject().property("PluginsLoader").call();                  //var jsLdr = PluginsLoader();
+    QStringList plgNames= qscriptvalue_cast<QStringList>(jsLdr.property("names").call(jsLdr));      //plgNames = jsLdr.names();
+    return plgNames;
 }
 
-QScriptValue JSPluginsLoader::load(const QString &name) const {
+QScriptValue JSPluginsLoader::load(const QString &name, int idx) const {
     QScriptContext *ctx = eng.currentContext();
-    QScriptValue jsldr = ctx->activationObject().property("PluginsLoader").call();      //var jsldr = PluginsLoader();
+    QScriptValue jsLdr = ctx->activationObject().property("PluginsLoader").call();      //var jsldr = PluginsLoader();
 
     QScriptValueList args;
     args << name;
-    QScriptValue plugin = jsldr.property("load").call(jsldr, args);                     //var plugin = jsldr.load(name);
+    if(idx > 0)
+        args << idx;    //second argument is optional in js code
+    QScriptValue plugin = jsLdr.property("load").call(jsLdr, args);                     //var plugin = jsldr.load(name);
     return plugin;
 }
