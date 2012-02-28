@@ -22,6 +22,8 @@
 #include "ui_mainwindow.h"
 #include "dataparser.h"
 #include "datadumper.h"
+#include "plugin.h"
+#include "pluginsprovider.h"
 #include <QFileDialog>
 
 void MainWindow::_netSetup(){
@@ -42,12 +44,21 @@ void MainWindow::_netCleanup(){
 
 void MainWindow::_saveDumpedData(){
     _sltLog(tr("Saving..."));
-    QString dumpFileName = QFileDialog::getSaveFileName(this, "Save As:", "ipfilter.dat", "*.*");
-    if(!dumpFileName.isEmpty()){
-        dataDumper->flushToFile(dumpFileName);
-        _sltLog(tr("Saved to: %1").arg(dumpFileName));
 
-    } else _sltLog(tr("Saving canceled."));
+    QString outFileName = QFileDialog::getSaveFileName(this, "Save As:", "ipfilter.dat", "*.*");
+    QFile outFile(outFileName);
+
+    if(outFile.open(QIODevice::WriteOnly)){
+        Plugin *plg = _currentPlugin();
+        QTextStream out(&outFile);
+
+        out << plg->invoke(ipr);
+
+        delete plg;
+        _sltLog(tr("Saved to: %1").arg(outFileName));
+
+    } else
+        _sltLog(tr("Saving canceled."));
 }
 
 //PRIVATE SLOTS----------------------------------------------------------------

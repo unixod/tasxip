@@ -2,4 +2,7 @@
     <qresource prefix="/jshelper">
         <file>jspluginsloader.js</file>
     </qresource>
+    <qresource prefix="/plugins">
+        <file>basicplugin.js</file>
+    </qresource>
 </RCC>

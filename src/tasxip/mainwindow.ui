@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>309</width>
-    <height>539</height>
+    <height>516</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,57 +68,41 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="gbCustomizations">
+     <widget class="QGroupBox" name="gbSettings">
       <property name="title">
-       <string>Customizations</string>
+       <string>Output Format</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Plugin:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Filter format:</string>
+          <widget class="QComboBox" name="cmbPluginsNames">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbtnFmtSimple">
-           <property name="text">
-            <string>Simple</string>
-           </property>
-           <property name="checked">
+           <property name="duplicatesEnabled">
             <bool>true</bool>
            </property>
-           <attribute name="buttonGroup">
-            <string>bgrpFormats</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="rbtnFmtP2P">
+          <widget class="QToolButton" name="tbtnPluginInfo">
            <property name="text">
-            <string>P2P</string>
+            <string>i</string>
            </property>
-           <attribute name="buttonGroup">
-            <string>bgrpFormats</string>
-           </attribute>
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>163</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -190,7 +174,7 @@ p, li { white-space: pre-wrap; }
    <addaction name="actionLog"/>
    <addaction name="actionAbout"/>
    <addaction name="separator"/>
-   <addaction name="actionCustomize"/>
+   <addaction name="actionSettings"/>
   </widget>
   <action name="actionLog">
    <property name="checkable">
@@ -211,12 +195,15 @@ p, li { white-space: pre-wrap; }
     <string>About</string>
    </property>
   </action>
-  <action name="actionCustomize">
+  <action name="actionSettings">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Customize</string>
+    <string>Settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
@@ -288,9 +275,9 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>actionCustomize</sender>
+   <sender>actionSettings</sender>
    <signal>toggled(bool)</signal>
-   <receiver>gbCustomizations</receiver>
+   <receiver>gbSettings</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">

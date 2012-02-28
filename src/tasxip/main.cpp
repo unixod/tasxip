@@ -31,12 +31,23 @@ int main(int argc, char *argv[]){
     QCoreApplication::setApplicationName("tasxip");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    //Paths
+    //Preparing paths
     QString appDir = QDir::homePath() + "/." + a.applicationName();
-    QString pluginsPath = appDir + "/plugins";
+    QDir pluginsDir(appDir + "/plugins");
+    if(!pluginsDir.exists())
+        QDir().mkpath(pluginsDir.absolutePath());
 
     //Loading plugis
-    PluginsProvider *plgProvider = getPluginsProvider(pluginsPath);
+    PluginsProvider *plgProvider = getPluginsProvider(pluginsDir);
+
+    if(!plgProvider){
+        QFile::copy(":/plugins/basicplugin.js", pluginsDir.absolutePath() + "/basicplugin.js");
+        plgProvider = getPluginsProvider(pluginsDir);
+        if(!plgProvider){
+            qDebug() << "Can't read/write from " + pluginsDir.absolutePath();
+            return 1;
+        }
+    }
 
     MainWindow w(plgProvider);
     w.show();

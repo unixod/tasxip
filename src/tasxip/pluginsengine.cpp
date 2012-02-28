@@ -2,8 +2,7 @@
 #include "jspluginscontainer.h"
 #include <QDir>
 
-PluginsProvider * getPluginsProvider(const QString &path){
-    QDir dir(path);
+PluginsProvider * getPluginsProvider(const QDir &dir){
     QStringList files = dir.entryList(QStringList() << "*.js",
                                       QDir::Readable | QDir::Files | QDir::CaseSensitive);
 
@@ -11,6 +10,6 @@ PluginsProvider * getPluginsProvider(const QString &path){
         return 0;
 
     JSPluginsContainer *provider = new JSPluginsContainer;
-    foreach(const QString plugin, files) provider->add(plugin);
+    foreach(const QString plugin, files) provider->add(dir.path() + "/" + plugin);
     return provider;
 }

@@ -40,7 +40,8 @@ RESOURCES += \
     resources.qrc
 
 OTHER_FILES += \
-    jspluginsloader.js
+    jspluginsloader.js \
+    basicplugin.js
 
 
 

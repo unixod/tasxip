@@ -26,6 +26,7 @@
 #include "rangeset.h"
 
 class PluginsProvider;
+class Plugin;
 
 namespace Ui {
     class MainWindow;
@@ -39,15 +40,7 @@ class DataDumper;
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
-    QNetworkAccessManager *nam;
-    QNetworkRequest *req;
-    QByteArray req_params;
 
-    DataParser *dataParser;
-    DataDumper *dataDumper;
-    RangeSet<unsigned int> ipr;
-
-    PluginsProvider *plugins;
 
     enum UiState{
         Stopped,
@@ -59,14 +52,12 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
-    void _saveDumpedData();
-
-private:
     void _changeUiState(UiState);
     void _uiSetup();
     void _netSetup();
     void _netCleanup();
+    void _saveDumpedData();
+    Plugin * _currentPlugin();
 
 private slots:
     void on_btnStart_clicked();
@@ -75,7 +66,21 @@ private slots:
     void _sltDownloadProgress(qint64, qint64);
     void _sltLog(const QString &);
     void _sltToolBarActions(QAction *);
-    void _sltFilterFmtChanged();
+//    void _sltFilterFmtChanged();
+
+private:
+    Ui::MainWindow *ui;
+
+    QNetworkAccessManager *nam;
+    QNetworkRequest *req;
+    QByteArray req_params;
+
+    DataParser *dataParser;
+    DataDumper *dataDumper;
+    RangeSet<unsigned int> ipr;
+
+    PluginsProvider *plugins;
+    std::pair<int, Plugin*> prevLoadedPlugin;
 };
 
 #endif // MAINWINDOW_H

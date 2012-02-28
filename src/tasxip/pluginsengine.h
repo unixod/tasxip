@@ -2,8 +2,8 @@
 #define PLUGINSENGINE_H
 
 #include "pluginsprovider.h"
-class QString;
+class QDir;
 
-PluginsProvider * getPluginsProvider(const QString &);
+PluginsProvider * getPluginsProvider(const QDir &);
 
 #endif // PLUGINSENGINE_H
