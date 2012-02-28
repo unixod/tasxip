@@ -65,18 +65,6 @@ JSPlugin::~JSPlugin(){
     delete loader;
 }
 
-void JSPlugin::initProps(){
-    QScriptValue prop;
-
-    prop = plugin.property("version");
-    if(prop.isValid()) _version = prop.toString();
-
-    prop = plugin.property("name");
-    if(prop.isValid()) _name = prop.toString();
-
-    prop = plugin.property("description");
-    if(prop.isValid()) _description = prop.toString();
-}
 
 QString JSPlugin::version() const {
     return _version;
@@ -99,6 +87,23 @@ QString JSPlugin::invoke(const IPv6RangeSet &range){
 
     return out;
 }
+
+
+//PRIVATE METHODS--------------------------------------------------------------
+void JSPlugin::initProps(){
+    QScriptValue prop;
+
+    prop = plugin.property("version");
+    if(prop.isValid()) _version = prop.toString();
+
+    prop = plugin.property("name");
+    if(prop.isValid()) _name = prop.toString();
+
+    prop = plugin.property("description");
+    if(prop.isValid()) _description = prop.toString();
+}
+
+
 
 //void JSPlugin::flush(const QString &out_data){
 //}

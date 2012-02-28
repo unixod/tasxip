@@ -14,7 +14,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     mainwindow_net.cpp \
     dataparser.cpp \
-    datadumper.cpp \
     jspluginscontainer.cpp \
     jsplugin.cpp \
     jspluginsloader.cpp \
@@ -23,7 +22,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     dataparser.h \
     rangeset.h \
-    datadumper.h \
     pluginsprovider.h \
     jspluginscontainer.h \
     plugin.h \

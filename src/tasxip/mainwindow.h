@@ -36,11 +36,11 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 class DataParser;
-class DataDumper;
+
+
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
-
 
     enum UiState{
         Stopped,
@@ -51,21 +51,22 @@ public:
     explicit MainWindow(PluginsProvider *, QWidget *parent = 0);
     ~MainWindow();
 
+
 private:
-    void _changeUiState(UiState);
-    void _uiSetup();
-    void _netSetup();
-    void _netCleanup();
-    void _saveDumpedData();
-    Plugin * _currentPlugin();
+    void changeUiState(UiState);
+    void uiSetup();
+    void netSetup();
+    void netCleanup();
+    void saveDumpedData();
+    Plugin * currentPlugin();
 
 private slots:
     void on_btnStart_clicked();
-    void _sltReplyFinshed(QNetworkReply *);
-    void _sltReplyError(QNetworkReply::NetworkError);
-    void _sltDownloadProgress(qint64, qint64);
-    void _sltLog(const QString &);
-    void _sltToolBarActions(QAction *);
+    void sltReplyFinshed(QNetworkReply *);
+    void sltReplyError(QNetworkReply::NetworkError);
+    void sltDownloadProgress(qint64, qint64);
+    void sltLog(const QString &);
+    void sltToolBarActions(QAction *);
 //    void _sltFilterFmtChanged();
 
 private:
@@ -76,7 +77,6 @@ private:
     QByteArray req_params;
 
     DataParser *dataParser;
-    DataDumper *dataDumper;
     RangeSet<unsigned int> ipr;
 
     PluginsProvider *plugins;

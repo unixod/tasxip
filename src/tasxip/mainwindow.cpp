@@ -21,7 +21,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dataparser.h"
-#include "datadumper.h"
 #include "pluginsprovider.h"
 #include "plugin.h"
 
@@ -33,17 +32,16 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     ui->setupUi(this);
 
     dataParser = new DataParser(&ipr);
-    dataDumper = new DataDumper(&ipr);
 
 //    _sltFilterFmtChanged(); //for initialize dataDumper format
 
     //connect(ui->bgrpFormats, SIGNAL(buttonClicked(int)), this, SLOT(_sltFilterFmtChanged()));
 
     //Ui Setup
-    _uiSetup();
+    uiSetup();
 
     //Newtwork Setup
-    _netSetup();
+    netSetup();
 
     prevLoadedPlugin.first = -1;
     prevLoadedPlugin.second = 0;
@@ -52,14 +50,13 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
 MainWindow::~MainWindow(){
     delete ui;
     delete dataParser;
-    delete dataDumper;
     delete prevLoadedPlugin.second;
 
-    _netCleanup();
+    netCleanup();
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
-void MainWindow::_uiSetup(){
+void MainWindow::uiSetup(){
     QStringList names = plugins->names();
     QString tmp;
     int idx;
@@ -80,13 +77,13 @@ void MainWindow::_uiSetup(){
     ui->lbl_bottom->setHidden(true);
     ui->gbSettings->setHidden(true);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
-    _changeUiState(Stopped);
+    changeUiState(Stopped);
 
     //SIGNAL-SLOT Connections
-    connect(ui->mainToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(_sltToolBarActions(QAction*)));
+    connect(ui->mainToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(sltToolBarActions(QAction*)));
 }
 
-void MainWindow::_changeUiState(UiState state){
+void MainWindow::changeUiState(UiState state){
     switch(state){
     case Stopped:
         ui->btnStart->setEnabled(true);
@@ -101,7 +98,7 @@ void MainWindow::_changeUiState(UiState state){
     }
 }
 
-Plugin * MainWindow::_currentPlugin(){
+Plugin * MainWindow::currentPlugin(){
     int selItem = ui->cmbPluginsNames->currentIndex();
 
     if(prevLoadedPlugin.first != selItem){
@@ -117,7 +114,7 @@ Plugin * MainWindow::_currentPlugin(){
 }
 
 //PRIVATE SLOTS----------------------------------------------------------------
-void MainWindow::_sltToolBarActions(QAction *action){
+void MainWindow::sltToolBarActions(QAction *action){
     if(action->isChecked()){
         QList<QAction *> lst_a = ui->mainToolBar->actions();
         foreach(QAction *a, lst_a){
@@ -126,11 +123,11 @@ void MainWindow::_sltToolBarActions(QAction *action){
     }
 }
 
-void MainWindow::_sltLog(const QString &log_str){
+void MainWindow::sltLog(const QString &log_str){
     ui->txtbLog->append(log_str);
 }
 
-void MainWindow::_sltDownloadProgress(qint64 val, qint64 total){
+void MainWindow::sltDownloadProgress(qint64 val, qint64 total){
     if(total > 0){
         ui->progressBar->setMaximum(total);
         ui->progressBar->setValue(val);

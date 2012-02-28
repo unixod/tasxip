@@ -21,12 +21,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dataparser.h"
-#include "datadumper.h"
 #include "plugin.h"
 #include "pluginsprovider.h"
 #include <QFileDialog>
 
-void MainWindow::_netSetup(){
+void MainWindow::netSetup(){
     nam = new QNetworkAccessManager(this);
 
     //Request Setup
@@ -34,65 +33,64 @@ void MainWindow::_netSetup(){
     req_params = "query=1";
 
     //SIGNAL-SLOT Connections
-    connect(nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(_sltReplyFinshed(QNetworkReply*)));
+    connect(nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(sltReplyFinshed(QNetworkReply*)));
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
-void MainWindow::_netCleanup(){
+void MainWindow::netCleanup(){
     delete req;
 }
 
-void MainWindow::_saveDumpedData(){
-    _sltLog(tr("Saving..."));
+void MainWindow::saveDumpedData(){
+    sltLog(tr("Saving..."));
 
     QString outFileName = QFileDialog::getSaveFileName(this, "Save As:", "ipfilter.dat", "*.*");
     QFile outFile(outFileName);
 
     if(outFile.open(QIODevice::WriteOnly)){
-        Plugin *plg = _currentPlugin();
+        Plugin *plg = currentPlugin();
         QTextStream out(&outFile);
 
         out << plg->invoke(ipr);
 
-        delete plg;
-        _sltLog(tr("Saved to: %1").arg(outFileName));
+        sltLog(tr("Saved to: %1").arg(outFileName));
 
     } else
-        _sltLog(tr("Saving canceled."));
+        sltLog(tr("Saving canceled."));
 }
 
 //PRIVATE SLOTS----------------------------------------------------------------
 void MainWindow::on_btnStart_clicked(){
-    _changeUiState(Processed);
+    changeUiState(Processed);
 
     QNetworkReply *reply = nam->post(*req, req_params);
-    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(_sltDownloadProgress(qint64,qint64)));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(_sltReplyError(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(sltDownloadProgress(qint64,qint64)));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(sltReplyError(QNetworkReply::NetworkError)));
 }
 
-void MainWindow::_sltReplyFinshed(QNetworkReply *reply){
+void MainWindow::sltReplyFinshed(QNetworkReply *reply){
 
     if(reply->size() > 0){
-        _sltLog(tr("Processing received data..."));
+        sltLog(tr("Processing received data..."));
         dataParser->parse(reply);
-        _sltLog(tr("+-- parsed ip ranges count %1:").arg(dataParser->parsedCount()));
-        _sltLog(tr("+-- output ip ranges count %1:").arg(dataParser->resultCount()));
+        sltLog(tr("+-- parsed ip ranges count %1:").arg(dataParser->parsedCount()));
+        sltLog(tr("+-- output ip ranges count %1:").arg(dataParser->resultCount()));
 
-        _saveDumpedData();
+        saveDumpedData();
 
-        _sltLog(tr("Complete."));
+        sltLog(tr("Complete."));
     }
 
-    _changeUiState(Stopped);
+    changeUiState(Stopped);
 
     reply->deleteLater();
 }
 
-void MainWindow::_sltReplyError(QNetworkReply::NetworkError code){
+void MainWindow::sltReplyError(QNetworkReply::NetworkError code){
     QNetworkReply *reply;
     if((reply = qobject_cast<QNetworkReply *>(sender()))){
-        _sltLog(QString("Error code: %1").arg(code));
-        _sltLog(reply->errorString());
+        sltLog(QString("Error code: %1").arg(code));
+        sltLog(reply->errorString());
         reply->deleteLater();
     }
 }
