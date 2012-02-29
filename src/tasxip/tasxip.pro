@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     jspluginscontainer.cpp \
     jsplugin.cpp \
     jspluginsloader.cpp \
-    pluginsengine.cpp
+    pluginsengine.cpp \
+    plugininfodlg.cpp
 
 HEADERS  += mainwindow.h \
     dataparser.h \
@@ -28,9 +29,11 @@ HEADERS  += mainwindow.h \
     jsplugin.h \
     jspluginsloader.h \
     ipv6rangeset.h \
-    pluginsengine.h
+    pluginsengine.h \
+    plugininfodlg.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    plugininfodlg.ui
 
 DEFINES += VERSION
 

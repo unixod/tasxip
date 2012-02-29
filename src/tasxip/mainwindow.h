@@ -62,12 +62,13 @@ private:
 
 private slots:
     void on_btnStart_clicked();
+    void on_tbtnPluginInfo_clicked();
     void sltReplyFinshed(QNetworkReply *);
     void sltReplyError(QNetworkReply::NetworkError);
     void sltDownloadProgress(qint64, qint64);
     void sltLog(const QString &);
     void sltToolBarActions(QAction *);
-//    void _sltFilterFmtChanged();
+
 
 private:
     Ui::MainWindow *ui;

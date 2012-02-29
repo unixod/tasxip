@@ -23,6 +23,7 @@
 #include "dataparser.h"
 #include "pluginsprovider.h"
 #include "plugin.h"
+#include "plugininfodlg.h"
 
 MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     QMainWindow(parent),
@@ -32,10 +33,6 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     ui->setupUi(this);
 
     dataParser = new DataParser(&ipr);
-
-//    _sltFilterFmtChanged(); //for initialize dataDumper format
-
-    //connect(ui->bgrpFormats, SIGNAL(buttonClicked(int)), this, SLOT(_sltFilterFmtChanged()));
 
     //Ui Setup
     uiSetup();
@@ -134,9 +131,6 @@ void MainWindow::sltDownloadProgress(qint64 val, qint64 total){
     }
 }
 
-//void MainWindow::_sltFilterFmtChanged(){
-//    /*QRadioButton *rbtn = qobject_cast<QRadioButton *>(ui->bgrpFormats->checkedButton());
-
-//    if(rbtn == ui->rbtnFmtSimple) dataDumper->setFormat(DataDumper::SIMPLE);
-//    else if(rbtn == ui->rbtnFmtP2P) dataDumper->setFormat(DataDumper::P2P);*/
-//}
+void MainWindow::on_tbtnPluginInfo_clicked(){
+    PluginInfoDlg::showModal(currentPlugin());
+}
