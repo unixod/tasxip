@@ -24,8 +24,9 @@
 #include "pluginsprovider.h"
 #include "plugin.h"
 #include "plugininfodlg.h"
+#include <QSettings>
 
-MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
+MainWindow::MainWindow(const QDir &appDir, PluginsProvider *plgProvider, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     plugins(plgProvider)
@@ -33,6 +34,8 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     ui->setupUi(this);
 
     dataParser = new DataParser(&ipr);
+
+    cfg = new QSettings(appDir.absolutePath() + "/" + "tasxip.cfg", QSettings::IniFormat);
 
     //Ui Setup
     uiSetup();
@@ -45,11 +48,12 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
 }
 
 MainWindow::~MainWindow(){
+    netCleanup();
+
     delete ui;
     delete dataParser;
     delete prevLoadedPlugin.second;
-
-    netCleanup();
+    delete cfg;
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
@@ -72,12 +76,26 @@ void MainWindow::uiSetup(){
     ui->lbl_px->setHidden(true);
     ui->lbl_tasxip->setHidden(true);
     ui->lbl_bottom->setHidden(true);
-    ui->gbSettings->setHidden(true);
+    ui->tabSettings->setHidden(true);
+    ui->btnbxSettings->setHidden(true);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+    readSettings();
+
     changeUiState(Stopped);
 
-    //SIGNAL-SLOT Connections
+
     connect(ui->mainToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(sltToolBarActions(QAction*)));
+
+    //Outupt tab
+    connect(ui->cmbPluginsNames, SIGNAL(currentIndexChanged(int)), this, SLOT(sltSettingsChanged()));
+
+    //Network tab
+    connect(ui->lneProxyAddr, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
+    connect(ui->lneProxyPort, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
+    connect(ui->lneProxyUser, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
+    connect(ui->lneProxyPasswd, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
+    connect(ui->chbxAuthRequired, SIGNAL(stateChanged(int)), this, SLOT(sltSettingsChanged()));
 }
 
 void MainWindow::changeUiState(UiState state){
@@ -110,7 +128,51 @@ Plugin * MainWindow::currentPlugin(){
     return prevLoadedPlugin.second;
 }
 
+void MainWindow::readSettings(){
+    //Outupt tab
+    ui->cmbPluginsNames->setCurrentIndex(cfg->value("loaded_plugin").toInt());
+
+    //Network tab
+    ui->lneProxyAddr->setText(cfg->value("proxy_addr").toString());
+    ui->lneProxyPort->setText(cfg->value("proxy_port").toString());
+    ui->lneProxyUser->setText(cfg->value("proxy_user").toString());
+    ui->lneProxyPasswd->setText(cfg->value("proxy_passwd").toString());
+    ui->chbxAuthRequired->setChecked(cfg->value("proxy_auth_req").toBool());
+}
+
+void MainWindow::writeSettings(){
+    //Outupt tab
+    cfg->setValue("loaded_plugin", ui->cmbPluginsNames->currentIndex());
+
+    //Network tab
+    cfg->setValue("proxy_addr", ui->lneProxyAddr->text());
+    cfg->setValue("proxy_port", ui->lneProxyPort->text());
+    cfg->setValue("proxy_user", ui->lneProxyUser->text());
+    cfg->setValue("proxy_passwd", ui->lneProxyPasswd->text());
+    cfg->setValue("proxy_auth_req", ui->chbxAuthRequired->isChecked());
+}
+
 //PRIVATE SLOTS----------------------------------------------------------------
+void MainWindow::on_tbtnPluginInfo_clicked(){
+    PluginInfoDlg::showModal(currentPlugin());
+}
+
+void MainWindow::on_btnbxSettings_clicked(QAbstractButton * button){
+    if(QDialogButtonBox *snd = qobject_cast<QDialogButtonBox *>(sender())){
+        switch(snd->standardButton(button)){
+        case QDialogButtonBox::Apply:
+            writeSettings();
+            break;
+        case QDialogButtonBox::Reset:
+            readSettings();
+            break;
+        default:
+            break;
+        }
+    }
+    ui->btnbxSettings->setDisabled(true);
+}
+
 void MainWindow::sltToolBarActions(QAction *action){
     if(action->isChecked()){
         QList<QAction *> lst_a = ui->mainToolBar->actions();
@@ -131,6 +193,6 @@ void MainWindow::sltDownloadProgress(qint64 val, qint64 total){
     }
 }
 
-void MainWindow::on_tbtnPluginInfo_clicked(){
-    PluginInfoDlg::showModal(currentPlugin());
+void MainWindow::sltSettingsChanged(){
+    ui->btnbxSettings->setEnabled(true);
 }

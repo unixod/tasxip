@@ -36,7 +36,8 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 class DataParser;
-
+class QSettings;
+class QAbstractButton;
 
 
 class MainWindow : public QMainWindow{
@@ -48,7 +49,7 @@ class MainWindow : public QMainWindow{
     };
 
 public:
-    explicit MainWindow(PluginsProvider *, QWidget *parent = 0);
+    explicit MainWindow(const QDir &appDir, PluginsProvider *, QWidget *parent = 0);
     ~MainWindow();
 
 
@@ -59,19 +60,25 @@ private:
     void netCleanup();
     void saveDumpedData();
     Plugin * currentPlugin();
+    void readSettings();
+    void writeSettings();
 
 private slots:
     void on_btnStart_clicked();
     void on_tbtnPluginInfo_clicked();
+    void on_btnbxSettings_clicked(QAbstractButton *);
     void sltReplyFinshed(QNetworkReply *);
     void sltReplyError(QNetworkReply::NetworkError);
     void sltDownloadProgress(qint64, qint64);
     void sltLog(const QString &);
     void sltToolBarActions(QAction *);
+    void sltSettingsChanged();
 
 
 private:
     Ui::MainWindow *ui;
+
+    QSettings *cfg;
 
     QNetworkAccessManager *nam;
     QNetworkRequest *req;

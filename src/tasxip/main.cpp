@@ -26,7 +26,7 @@
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
 
-    QCoreApplication::setOrganizationName("Unixod");
+    QCoreApplication::setOrganizationName("unixod");
     QCoreApplication::setOrganizationDomain("unixod.github.com");
     QCoreApplication::setApplicationName("tasxip");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    MainWindow w(plgProvider);
+    MainWindow w(appDir, plgProvider);
     w.show();
 
     return a.exec();
