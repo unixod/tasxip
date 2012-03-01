@@ -35,6 +35,7 @@ MainWindow::MainWindow(const QDir &appDir, PluginsProvider *plgProvider, QWidget
 
     dataParser = new DataParser(&ipr);
 
+
     cfg = new QSettings(appDir.absolutePath() + "/" + "tasxip.cfg", QSettings::IniFormat);
 
     //Ui Setup
@@ -68,6 +69,7 @@ void MainWindow::uiSetup(){
             ++idx;
 
         ui->cmbPluginsNames->addItem(name, idx);
+        tmp = name;
     }
 
     this->setWindowTitle(QString("TasXIP %1").arg(VERSION));
@@ -80,35 +82,44 @@ void MainWindow::uiSetup(){
     ui->btnbxSettings->setHidden(true);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    readSettings();
-
     changeUiState(Stopped);
 
+    readSettings();
 
     connect(ui->mainToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(sltToolBarActions(QAction*)));
 
     //Outupt tab
-    connect(ui->cmbPluginsNames, SIGNAL(currentIndexChanged(int)), this, SLOT(sltSettingsChanged()));
+    connect(ui->cmbPluginsNames, SIGNAL(currentIndexChanged(int)), this, SLOT(sltSettingsUIChanged()));
 
     //Network tab
-    connect(ui->lneProxyAddr, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
-    connect(ui->lneProxyPort, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
-    connect(ui->lneProxyUser, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
-    connect(ui->lneProxyPasswd, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsChanged()));
-    connect(ui->chbxAuthRequired, SIGNAL(stateChanged(int)), this, SLOT(sltSettingsChanged()));
+    connect(ui->chbxProxyEnabled, SIGNAL(stateChanged(int)), this, SLOT(sltSettingsUIChanged()));
+    connect(ui->lneProxyAddr, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsUIChanged()));
+    connect(ui->lneProxyPort, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsUIChanged()));
+    connect(ui->lneProxyUser, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsUIChanged()));
+    connect(ui->lneProxyPasswd, SIGNAL(textChanged(QString)), this, SLOT(sltSettingsUIChanged()));
+    connect(ui->chbxAuthRequired, SIGNAL(stateChanged(int)), this, SLOT(sltSettingsUIChanged()));
 }
 
 void MainWindow::changeUiState(UiState state){
     switch(state){
     case Stopped:
         ui->btnStart->setEnabled(true);
+        ui->tabOutput->setEnabled(true);
+        ui->tabNetwork->setEnabled(true);
+        ui->btnbxSettings->setDisabled(true);
         ui->progressBar->setMaximum(100);
         ui->progressBar->setValue(0);
         break;
     case Processed:
         ui->btnStart->setDisabled(true);
+        ui->tabOutput->setDisabled(true);
+        ui->tabNetwork->setDisabled(true);
         ui->progressBar->reset();
         ui->progressBar->setMaximum(0);
+        break;
+    case SettingsNotSaved:
+        ui->btnStart->setDisabled(true);
+        ui->btnbxSettings->setEnabled(true);
         break;
     }
 }
@@ -133,11 +144,12 @@ void MainWindow::readSettings(){
     ui->cmbPluginsNames->setCurrentIndex(cfg->value("loaded_plugin").toInt());
 
     //Network tab
-    ui->lneProxyAddr->setText(cfg->value("proxy_addr").toString());
-    ui->lneProxyPort->setText(cfg->value("proxy_port").toString());
-    ui->lneProxyUser->setText(cfg->value("proxy_user").toString());
-    ui->lneProxyPasswd->setText(cfg->value("proxy_passwd").toString());
-    ui->chbxAuthRequired->setChecked(cfg->value("proxy_auth_req").toBool());
+    ui->chbxProxyEnabled->setChecked(cfg->value("network/proxy_enabled").toBool());
+    ui->lneProxyAddr->setText(cfg->value("proxy/addr").toString());
+    ui->lneProxyPort->setText(cfg->value("proxy/port").toString());
+    ui->lneProxyUser->setText(cfg->value("proxy/user").toString());
+    ui->lneProxyPasswd->setText(cfg->value("proxy/passwd").toString());
+    ui->chbxAuthRequired->setChecked(cfg->value("proxy/auth_req").toBool());
 }
 
 void MainWindow::writeSettings(){
@@ -145,11 +157,14 @@ void MainWindow::writeSettings(){
     cfg->setValue("loaded_plugin", ui->cmbPluginsNames->currentIndex());
 
     //Network tab
-    cfg->setValue("proxy_addr", ui->lneProxyAddr->text());
-    cfg->setValue("proxy_port", ui->lneProxyPort->text());
-    cfg->setValue("proxy_user", ui->lneProxyUser->text());
-    cfg->setValue("proxy_passwd", ui->lneProxyPasswd->text());
-    cfg->setValue("proxy_auth_req", ui->chbxAuthRequired->isChecked());
+    cfg->setValue("network/proxy_enabled", ui->chbxProxyEnabled->isChecked());
+    cfg->setValue("proxy/addr", ui->lneProxyAddr->text());
+    cfg->setValue("proxy/port", ui->lneProxyPort->text());
+    cfg->setValue("proxy/user", ui->lneProxyUser->text());
+    cfg->setValue("proxy/passwd", ui->lneProxyPasswd->text());
+    cfg->setValue("proxy/auth_req", ui->chbxAuthRequired->isChecked());
+
+    emit sigSettingsChanged();
 }
 
 //PRIVATE SLOTS----------------------------------------------------------------
@@ -170,7 +185,7 @@ void MainWindow::on_btnbxSettings_clicked(QAbstractButton * button){
             break;
         }
     }
-    ui->btnbxSettings->setDisabled(true);
+    changeUiState(Stopped);
 }
 
 void MainWindow::sltToolBarActions(QAction *action){
@@ -193,6 +208,6 @@ void MainWindow::sltDownloadProgress(qint64 val, qint64 total){
     }
 }
 
-void MainWindow::sltSettingsChanged(){
-    ui->btnbxSettings->setEnabled(true);
+void MainWindow::sltSettingsUIChanged(){
+    changeUiState(SettingsNotSaved);
 }

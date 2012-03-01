@@ -1,10 +1,45 @@
 ### TasXIP ###
 
-IP filters generator (Multi-Router Looking Glass (MRLG) output (ip bgp) parser).
+Scriptable IP filters generator (Multi-Router Looking Glass (MRLG) output (ip bgp) parser).
 
 ### About ###
 
 TasXIP is a simple web-dumping tool, that dump info from http://mrlg.tas-ix.uz/index.cgi, and make ipfilter file (p2p format) for programs like uTorrent, IP Blocker, etc.
+Output format depends on the used plugin. Plugins - written in JavaScript, in following format:
+
+Plugin - is a text file that contains the definition of a javascript-function 'plugin', that exports the plugin-object:
+	function plugin(){
+		return <plugin_object>;
+	}
+
+	where <plugin_object> - JS object, which can have following fields:
+		minimum_required -	minimum loader version (optional field)
+		version		 -	plugin version (optional field)
+		name		 -	plugin name
+		description	 -	short plugin description (optional field)
+		invoke(iprange)	 -	plugins main function
+	
+
+Complete plugin example:
+
+//basicplugin.js
+function plugin(){
+    return {
+        name: "Plugin name",
+        description: "Plugin description",
+        version: "Plugin.Version.Number",
+        invoke: function(iprange){
+            var result = "";
+            for(var i = 0; i < iprange.length; i++){
+                result += iprange[i].from + '-' + iprange[i].to + '\n';
+            }
+            return result;
+        }
+    }
+}
+
+Plugins location is:
+	{USER_HOME}/.tasxip/plugins
 
   ___   __
   //_/\// 

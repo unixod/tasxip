@@ -45,7 +45,8 @@ class MainWindow : public QMainWindow{
 
     enum UiState{
         Stopped,
-        Processed
+        Processed,
+        SettingsNotSaved
     };
 
 public:
@@ -63,6 +64,9 @@ private:
     void readSettings();
     void writeSettings();
 
+signals:
+    void sigSettingsChanged();
+
 private slots:
     void on_btnStart_clicked();
     void on_tbtnPluginInfo_clicked();
@@ -72,7 +76,8 @@ private slots:
     void sltDownloadProgress(qint64, qint64);
     void sltLog(const QString &);
     void sltToolBarActions(QAction *);
-    void sltSettingsChanged();
+    void sltSettingsUIChanged();
+    void sltNetConfigure();
 
 
 private:

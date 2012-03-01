@@ -32,13 +32,30 @@ void MainWindow::netSetup(){
     req = new QNetworkRequest(QUrl("http://mrlg.tas-ix.uz/index.cgi"));
     req_params = "query=1";
 
+    sltNetConfigure();
+
     //SIGNAL-SLOT Connections
     connect(nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(sltReplyFinshed(QNetworkReply*)));
+    connect(this, SIGNAL(sigSettingsChanged()), SLOT(sltNetConfigure()));
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
 void MainWindow::netCleanup(){
     delete req;
+}
+
+void MainWindow::sltNetConfigure(){
+    QNetworkProxy proxy;
+    if(ui->chbxProxyEnabled->isChecked()){
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(ui->lneProxyAddr->text());
+        proxy.setPort(ui->lneProxyPort->text().toInt());
+        if(ui->chbxAuthRequired->isChecked()){
+            proxy.setUser(ui->lneProxyUser->text());
+            proxy.setPassword(ui->lneProxyPasswd->text());
+        }
+    }
+    QNetworkProxy::setApplicationProxy(proxy);
 }
 
 void MainWindow::saveDumpedData(){

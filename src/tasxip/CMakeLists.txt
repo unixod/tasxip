@@ -14,37 +14,57 @@ set(CMAKE_BUILD_TYPE "Release")
 #======================================================================#
 find_package(Qt4 REQUIRED)
 set(QT_USE_QTNETWORK TRUE)
+set(QT_USE_QTSCRIPT TRUE)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 set(EXTRA_LIBS ${QT_LIBRARIES})
 #----------------------------------------------------------------------#
 
 set(tasxip_SOURCES
-	datadumper.cpp
 	dataparser.cpp
+	jsplugin.cpp
+	jspluginscontainer.cpp
+	jspluginsloader.cpp
 	main.cpp
 	mainwindow.cpp
 	mainwindow_net.cpp
+	plugininfodlg.cpp
+	pluginsengine.cpp
 )
 
 set(tasxip_HEADERS
-	mainwindow.h
 	dataparser.h
+	ipv6rangeset.h
+	jsplugin.h
+	jspluginscontainer.h
+	jspluginsloader.h
+	mainwindow.h
+	plugin.h
+	plugininfodlg.h
+	pluginsengine.h
+	pluginsprovider.h
 	rangeset.h
 )
 
 set(tasxip_FORMS
 	mainwindow.ui
+	plugininfodlg.ui
+)
+
+set(tasxip_RESOURCES
+	resources.qrc
 )
 
 QT4_WRAP_CPP(tasxip_HEADERS_MOC ${tasxip_HEADERS})
 QT4_WRAP_UI(tasxip_FORMS_HEADERS ${tasxip_FORMS})
+QT4_ADD_RESOURCES(tasxip_RESOURCES_RCC ${tasxip_RESOURCES})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(${PROJECT_NAME}
 	${tasxip_SOURCES}
 	${tasxip_HEADERS_MOC}
 	${tasxip_FORMS_HEADERS}
+	${tasxip_RESOURCES_RCC}
 )
 
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
