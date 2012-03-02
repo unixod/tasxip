@@ -60,7 +60,13 @@ QT4_WRAP_UI(tasxip_FORMS_HEADERS ${tasxip_FORMS})
 QT4_ADD_RESOURCES(tasxip_RESOURCES_RCC ${tasxip_RESOURCES})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(${PROJECT_NAME}
+if(WIN32)
+	SET(GUI_TYPE WIN32)
+elseif(APPLE)
+	SET(GUI_TYPE MACOSX_BUNDLE)
+endif()
+
+add_executable(${PROJECT_NAME} ${GUI_TYPE}
 	${tasxip_SOURCES}
 	${tasxip_HEADERS_MOC}
 	${tasxip_FORMS_HEADERS}
