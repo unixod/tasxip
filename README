@@ -40,6 +40,8 @@ function plugin(){
 
 Plugins location is:
 	{USER_HOME}/.tasxip/plugins
+		or
+	{EXECUTABLE_BIN_PATH}/plugins
 
   ___   __
   //_/\// 

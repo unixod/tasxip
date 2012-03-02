@@ -31,25 +31,38 @@ int main(int argc, char *argv[]){
     QCoreApplication::setApplicationName("tasxip");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    //Preparing paths
-    QString appDir = QDir::homePath() + "/." + a.applicationName();
-    QDir pluginsDir(appDir + "/plugins");
-    if(!pluginsDir.exists())
-        QDir().mkpath(pluginsDir.absolutePath());
+    //Preparing dirs
+    QString appDataDir = QDir::homePath() + "/." + a.applicationName();
+    QString pluginsDir = "plugins";
+    if(!QFile::exists(appDataDir + "/" + pluginsDir))
+        QDir().mkpath(appDataDir + "/" + pluginsDir);
+
+    //Paths, where plugins dir will be search
+    QStringList pluginsDirSearchPaths;
+    pluginsDirSearchPaths << appDataDir
+                          << QCoreApplication::applicationDirPath();
 
     //Loading plugis
-    PluginsProvider *plgProvider = getPluginsProvider(pluginsDir);
+    PluginsProvider *plgProvider;
+    foreach(const QString &dir, pluginsDirSearchPaths){
+        if(plgProvider = getPluginsProvider(dir + "/" + pluginsDir)){
+            pluginsDir.prepend(dir + "/");
+            break;
+        }
+    }
 
     if(!plgProvider){
-        QFile::copy(":/plugins/basicplugin.js", pluginsDir.absolutePath() + "/basicplugin.js");
+        pluginsDir.prepend(appDataDir + "/");
+
+        QFile::copy(":/plugins/basicplugin.js", pluginsDir + "/basicplugin.js");
         plgProvider = getPluginsProvider(pluginsDir);
         if(!plgProvider){
-            qDebug() << "Can't read/write from " + pluginsDir.absolutePath();
+            qDebug() << "Can't read/write from " + pluginsDir;
             return 1;
         }
     }
 
-    MainWindow w(appDir, plgProvider);
+    MainWindow w(appDataDir, plgProvider);
     w.show();
 
     return a.exec();
