@@ -39,8 +39,8 @@ int main(int argc, char *argv[]){
 
     //Paths, where plugins dir will be search
     QStringList pluginsDirSearchPaths;
-    pluginsDirSearchPaths << appDataDir
-                          << QCoreApplication::applicationDirPath();
+    pluginsDirSearchPaths << QCoreApplication::applicationDirPath()
+                          << appDataDir;
 
     //Loading plugis
     PluginsProvider *plgProvider;

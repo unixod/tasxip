@@ -29,7 +29,7 @@
 */
 class JSPluginsLoader{
 public:
-    JSPluginsLoader(const QScriptProgram &plugin);
+    JSPluginsLoader(const QScriptProgram &plugin) throw(QString);
     QStringList names() const;                      //gettings available plugins names
     QScriptValue load(const QString &name, int idx = 0) const;   //getting plugin by name
     QScriptEngine * engine(){return &eng;}

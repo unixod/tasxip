@@ -11,5 +11,9 @@ PluginsProvider * getPluginsProvider(const QDir &dir){
 
     JSPluginsContainer *provider = new JSPluginsContainer;
     foreach(const QString plugin, files) provider->add(dir.path() + "/" + plugin);
+    if(provider->names().isEmpty()){
+        delete provider;
+        provider = 0;
+    }
     return provider;
 }

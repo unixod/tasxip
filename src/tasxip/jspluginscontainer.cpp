@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <algorithm>
+#include <QDebug>
 
 bool JSPluginsContainer::add(const QString &fName){
     bool ret = false;
@@ -33,14 +34,18 @@ bool JSPluginsContainer::add(const QString &fName){
     if(file.open(QIODevice::ReadOnly)){
         QTextStream in(&file);
 
-        JSPluginsLoader ldr(in.readAll());
-        const QStringList plgNames = ldr.names();
+        try{
+            JSPluginsLoader ldr(in.readAll());
+            const QStringList plgNames = ldr.names();
 
-        foreach(const QString &name, plgNames){
-            plugins.insert(std::make_pair(name, fName));
+            foreach(const QString &name, plgNames){
+                plugins.insert(std::make_pair(name, fName));
+            }
+
+            ret = !plgNames.isEmpty();
+        } catch(QString error) {
+            qDebug() << error;
         }
-
-        ret = !plgNames.isEmpty();
     }
 
     return ret;
