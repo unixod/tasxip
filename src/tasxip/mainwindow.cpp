@@ -24,9 +24,9 @@
 #include "pluginsprovider.h"
 #include "plugin.h"
 #include "plugininfodlg.h"
-#include <QSettings>
+#include "settings.h"
 
-MainWindow::MainWindow(const QDir &appDir, PluginsProvider *plgProvider, QWidget *parent) :
+MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     plugins(plgProvider)
@@ -34,9 +34,6 @@ MainWindow::MainWindow(const QDir &appDir, PluginsProvider *plgProvider, QWidget
     ui->setupUi(this);
 
     dataParser = new DataParser(&ipr);
-
-
-    cfg = new QSettings(appDir.absolutePath() + "/" + "tasxip.cfg", QSettings::IniFormat);
 
     //Ui Setup
     uiSetup();
@@ -54,7 +51,6 @@ MainWindow::~MainWindow(){
     delete ui;
     delete dataParser;
     delete prevLoadedPlugin.second;
-    delete cfg;
 }
 
 //PRIVATE METHODS--------------------------------------------------------------
@@ -141,28 +137,28 @@ Plugin * MainWindow::currentPlugin(){
 
 void MainWindow::readSettings(){
     //Outupt tab
-    ui->cmbPluginsNames->setCurrentIndex(cfg->value("loaded_plugin").toInt());
+    ui->cmbPluginsNames->setCurrentIndex(Settings::get(Settings::LoadedPlugin).toInt());
 
     //Network tab
-    ui->chbxProxyEnabled->setChecked(cfg->value("network/proxy_enabled").toBool());
-    ui->lneProxyAddr->setText(cfg->value("proxy/addr").toString());
-    ui->lneProxyPort->setText(cfg->value("proxy/port").toString());
-    ui->lneProxyUser->setText(cfg->value("proxy/user").toString());
-    ui->lneProxyPasswd->setText(cfg->value("proxy/passwd").toString());
-    ui->chbxAuthRequired->setChecked(cfg->value("proxy/auth_req").toBool());
+    ui->chbxProxyEnabled->setChecked(Settings::get(Settings::ProxyEnabled, Settings::Network).toBool());
+    ui->lneProxyAddr->setText(Settings::get(Settings::ProxyAddress, Settings::Proxy).toString());
+    ui->lneProxyPort->setText(Settings::get(Settings::ProxyPort, Settings::Proxy).toString());
+    ui->lneProxyUser->setText(Settings::get(Settings::ProxyUser, Settings::Proxy).toString());
+    ui->lneProxyPasswd->setText(Settings::get(Settings::ProxyPassword, Settings::Proxy).toString());
+    ui->chbxAuthRequired->setChecked(Settings::get(Settings::ProxyAuthReq, Settings::Proxy).toBool());
 }
 
 void MainWindow::writeSettings(){
     //Outupt tab
-    cfg->setValue("loaded_plugin", ui->cmbPluginsNames->currentIndex());
+    Settings::set(Settings::LoadedPlugin) = ui->cmbPluginsNames->currentIndex();
 
     //Network tab
-    cfg->setValue("network/proxy_enabled", ui->chbxProxyEnabled->isChecked());
-    cfg->setValue("proxy/addr", ui->lneProxyAddr->text());
-    cfg->setValue("proxy/port", ui->lneProxyPort->text());
-    cfg->setValue("proxy/user", ui->lneProxyUser->text());
-    cfg->setValue("proxy/passwd", ui->lneProxyPasswd->text());
-    cfg->setValue("proxy/auth_req", ui->chbxAuthRequired->isChecked());
+    Settings::set(Settings::ProxyEnabled, Settings::Network) = ui->chbxProxyEnabled->isChecked();
+    Settings::set(Settings::ProxyAddress, Settings::Proxy) = ui->lneProxyAddr->text();
+    Settings::set(Settings::ProxyPort, Settings::Proxy) = ui->lneProxyPort->text();
+    Settings::set(Settings::ProxyUser, Settings::Proxy) = ui->lneProxyUser->text();
+    Settings::set(Settings::ProxyPassword, Settings::Proxy) = ui->lneProxyPasswd->text();
+    Settings::set(Settings::ProxyAuthReq, Settings::Proxy) = ui->chbxAuthRequired->isChecked();
 
     emit sigSettingsChanged();
 }

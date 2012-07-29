@@ -36,7 +36,6 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 class DataParser;
-class QSettings;
 class QAbstractButton;
 
 
@@ -50,7 +49,7 @@ class MainWindow : public QMainWindow{
     };
 
 public:
-    explicit MainWindow(const QDir &appDir, PluginsProvider *, QWidget *parent = 0);
+    explicit MainWindow(PluginsProvider *, QWidget *parent = 0);
     ~MainWindow();
 
 
@@ -82,8 +81,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
-    QSettings *cfg;
 
     QNetworkAccessManager *nam;
     QNetworkRequest *req;

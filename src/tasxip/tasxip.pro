@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     jsplugin.cpp \
     jspluginsloader.cpp \
     pluginsengine.cpp \
-    plugininfodlg.cpp
+    plugininfodlg.cpp \
+    settings.cpp
 
 HEADERS  += mainwindow.h \
     dataparser.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     jspluginsloader.h \
     ipv6rangeset.h \
     pluginsengine.h \
-    plugininfodlg.h
+    plugininfodlg.h \
+    settings.h
 
 FORMS    += mainwindow.ui \
     plugininfodlg.ui
@@ -44,6 +46,7 @@ OTHER_FILES += \
     jspluginsloader.js \
     basicplugin.js
 
+QMAKE_CXXFLAGS += -std=c++0x
 
 
 

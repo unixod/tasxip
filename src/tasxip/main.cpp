@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    MainWindow w(appDataDir, plgProvider);
+    MainWindow w(plgProvider);
     w.show();
 
     return a.exec();

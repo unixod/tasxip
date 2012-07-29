@@ -9,6 +9,11 @@ project(tasxip)
 #set(OUTPUT_BIN_DIR "bin")
 set(CMAKE_BUILD_TYPE "Release")
 
+#TEMPORARY HACK!!! (cmake stil not yet support switching to C++11)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-std=c++0x")
+endif()
+
 #======================================================================#
 # Qt supporting
 #======================================================================#
@@ -30,6 +35,7 @@ set(tasxip_SOURCES
 	mainwindow_net.cpp
 	plugininfodlg.cpp
 	pluginsengine.cpp
+    settings.cpp
 )
 
 set(tasxip_HEADERS
@@ -44,6 +50,7 @@ set(tasxip_HEADERS
 	pluginsengine.h
 	pluginsprovider.h
 	rangeset.h
+    settings.h
 )
 
 set(tasxip_FORMS
