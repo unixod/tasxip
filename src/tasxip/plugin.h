@@ -15,19 +15,23 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include "ipv6rangeset.h"
+#include <QList>
 
 class QString;
 class QIODevice;
 
 class Plugin{
 public:
+    typedef unsigned int IPBound;
+    typedef std::pair<IPBound, IPBound> IPRange;
+    typedef QList<IPRange> IPv6RangeSet;
+
     virtual QString version() const = 0;    //0x00MjMiMc - Mj - major byte, Mi - minor, Mc - micro
     virtual QString name() const = 0;
     virtual QString description() const = 0;

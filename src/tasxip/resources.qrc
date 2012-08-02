@@ -5,4 +5,7 @@
     <qresource prefix="/plugins">
         <file>basicplugin.js</file>
     </qresource>
+    <qresource prefix="/config">
+        <file>default.cfg</file>
+    </qresource>
 </RCC>

@@ -1,3 +1,23 @@
+/*
+    TasXIP - ipfilter files generator
+    Copyright (C) 2011-2012, Eldar Zakirov <unixod@gmail.com>
+
+    This file is part of TasXIP.
+
+    TasXIP is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    TasXIP is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
@@ -17,9 +37,9 @@
     QApplication::setApplicationName("App name");
     ...
     ...
-    //default values can be configured by by calling the (config
+    //default values can be configured by calling (config
     //string can be multyline):
-    Settings::setDefaults("SomeKey: somekey value; OtherKey: 2");
+    Settings::setDefaults("SomeKey: value1; SomeSection/SomeKey: value2");
 
     //or
     QFile f(":/defaults/config");
@@ -29,8 +49,11 @@
     ...
     void fun(){
         ...
-        QVariant val = Settings::get(Settings::SomeKey);
-        Settings::set(Settings::SomeKey) = "some value";
+        QVariant val1 = Settings::get(Settings::SomeKey);
+        Settings::set(Settings::SomeKey) = "new val1";
+        ...
+        QVariant val2 = Settings::get(Settings::SomeKey, Settings::SomeSection);
+        Settings::set(Settings::SomeKey, , Settings::SomeSection) = "new val2";
         ...
     }
   @endcode
@@ -47,6 +70,8 @@ public:
     };
 
     enum Key{
+        MRLGURI,
+        MRLGRPostParams,
         LoadedPlugin,
         ProxyEnabled,
         ProxyAddress,

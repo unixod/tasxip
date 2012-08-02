@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <QtCore/QString>
@@ -24,11 +24,11 @@
 #include <QTime>
 #include "jspluginscontainer.h"
 #include "plugin.h"
-#include "ipv6rangeset.h"
+#include "uau/rangeset.h"
 
 class JSPlugin_Test : public QObject{
     Q_OBJECT
-    QStringList plugins;
+    QStringList plgModules;
     JSPluginsContainer container;
 public:
     JSPlugin_Test();
@@ -40,14 +40,14 @@ private Q_SLOTS:
 };
 
 JSPlugin_Test::JSPlugin_Test(){
-    plugins << ":/plugins/minimum_plg.js"       //Minimum required plugin
+    plgModules << ":/plugins/minimum_plg.js"    //Minimum required plugin
                << ":/plugins/multi_plg.js";     //Multi-plugin
 }
 
 //Test cases---------------------------------------------------------------------------------------
 void JSPlugin_Test::initTestCase(){
-    foreach(const QString &plugin, plugins){
-        QVERIFY(container.add(plugin));
+    for(auto module : plgModules){
+        QVERIFY(container.add(module));
     }
 }
 
@@ -55,14 +55,14 @@ void JSPlugin_Test::cleanupTestCase(){
 }
 
 void JSPlugin_Test::invoke_test(){
-    QStringList plg_names = container.names();
-    foreach(const QString &name, plg_names){
+    QStringList plgNames = container.names();
+    for(auto name : plgNames){
         Plugin *plg = container.load(name);
         QCOMPARE(plg->name(),name);
 
         //preparing input args
-        IPv6RangeSet range;
-        range.init(0, 0xFFFFFFFF);
+        uau::RangeSet<unsigned int, QList> range;
+        range.assign_range(0, 0xFFFFFFFF);
         qsrand(QTime::currentTime().msec());
         int d1 = qrand();
         int d2 = qrand();
@@ -70,8 +70,8 @@ void JSPlugin_Test::invoke_test(){
 
         //c++ equal invoke method
         QString result = name + ":";
-        for(IPv6RangeSet::const_iterator i = range.begin(); i != range.end(); ++i){
-            result += QString::number(i->first) + "-" + QString::number(i->second) + ";";
+        for(auto i : range){
+            result += QString("%1-%2;").arg(i.first).arg(i.second);
         }
 
         QCOMPARE(plg->invoke(range), result);

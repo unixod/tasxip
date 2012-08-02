@@ -15,24 +15,29 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <QtGui/QApplication>
+#include <QDebug>
 #include "mainwindow.h"
 #include "pluginsengine.h"
-#include <QDebug>
+#include "settings.h"
 
 int main(int argc, char *argv[]){
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
     QCoreApplication::setOrganizationName("unixod");
     QCoreApplication::setOrganizationDomain("unixod.github.com");
     QCoreApplication::setApplicationName("tasxip");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
+    QFile cfgDefaults(":/config/default.cfg");
+    cfgDefaults.open(QIODevice::ReadOnly);
+    Settings::setDefaults(cfgDefaults.readAll());
+
     //Preparing dirs
-    QString appDataDir = QDir::homePath() + "/." + a.applicationName();
+    QString appDataDir = QDir::homePath() + "/." + app.applicationName();
     QString pluginsDir = "plugins";
     if(!QFile::exists(appDataDir + "/" + pluginsDir))
         QDir().mkpath(appDataDir + "/" + pluginsDir);
@@ -44,7 +49,7 @@ int main(int argc, char *argv[]){
 
     //Loading plugis
     PluginsProvider *plgProvider;
-    foreach(const QString &dir, pluginsDirSearchPaths){
+    for(auto dir : pluginsDirSearchPaths){
         if(plgProvider = getPluginsProvider(dir + "/" + pluginsDir)){
             pluginsDir.prepend(dir + "/");
             break;
@@ -62,8 +67,8 @@ int main(int argc, char *argv[]){
         }
     }
 
-    MainWindow w(plgProvider);
-    w.show();
+    MainWindow wnd(plgProvider);
+    wnd.show();
 
-    return a.exec();
+    return app.exec();
 }

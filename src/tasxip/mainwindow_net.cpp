@@ -15,26 +15,26 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dataparser.h"
 #include "plugin.h"
 #include "pluginsprovider.h"
+#include "settings.h"
 #include <QFileDialog>
 
 void MainWindow::netSetup(){
     nam = new QNetworkAccessManager(this);
 
     //Request Setup
-    req = new QNetworkRequest(QUrl("http://mrlg.tas-ix.uz/index.cgi"));
-    req_params = "query=1";
+    req = new QNetworkRequest(Settings::get(Settings::MRLGURI).toUrl());
+    reqParams = Settings::get(Settings::MRLGRPostParams).toByteArray();
 
     sltNetConfigure();
 
-    //SIGNAL-SLOT Connections
+    //SIGNAL-SLOT connections
     connect(nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(sltReplyFinshed(QNetworkReply*)));
     connect(this, SIGNAL(sigSettingsChanged()), SLOT(sltNetConfigure()));
 }
@@ -68,7 +68,7 @@ void MainWindow::saveDumpedData(){
         Plugin *plg = currentPlugin();
         QTextStream out(&outFile);
 
-        out << plg->invoke(ipr);
+        out << plg->invoke(dataParser.result());
 
         sltLog(tr("Saved to: %1").arg(outFileName));
 
@@ -80,7 +80,7 @@ void MainWindow::saveDumpedData(){
 void MainWindow::on_btnStart_clicked(){
     changeUiState(Processed);
 
-    QNetworkReply *reply = nam->post(*req, req_params);
+    QNetworkReply *reply = nam->post(*req, reqParams);
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(sltDownloadProgress(qint64,qint64)));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(sltReplyError(QNetworkReply::NetworkError)));
 }
@@ -89,9 +89,9 @@ void MainWindow::sltReplyFinshed(QNetworkReply *reply){
 
     if(reply->size() > 0){
         sltLog(tr("Processing received data..."));
-        dataParser->parse(reply);
-        sltLog(tr("+-- parsed ip ranges count %1:").arg(dataParser->parsedCount()));
-        sltLog(tr("+-- output ip ranges count %1:").arg(dataParser->resultCount()));
+        dataParser.parse(reply);
+        sltLog(tr("+-- parsed ip ranges count %1:").arg(dataParser.parsedCount()));
+        sltLog(tr("+-- output ip ranges count %1:").arg(dataParser.resultCount()));
 
         saveDumpedData();
 

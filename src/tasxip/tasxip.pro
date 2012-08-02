@@ -23,13 +23,11 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     dataparser.h \
-    rangeset.h \
     pluginsprovider.h \
     jspluginscontainer.h \
     plugin.h \
     jsplugin.h \
     jspluginsloader.h \
-    ipv6rangeset.h \
     pluginsengine.h \
     plugininfodlg.h \
     settings.h
@@ -44,8 +42,11 @@ RESOURCES += \
 
 OTHER_FILES += \
     jspluginsloader.js \
-    basicplugin.js
+    basicplugin.js \
+    default.cfg
 
+INCLUDEPATH += $$PWD/../uau
+DEPENDPATH += $$PWD/../uau
 QMAKE_CXXFLAGS += -std=c++0x
 
 

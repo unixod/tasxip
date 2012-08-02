@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "jspluginscontainer.h"
@@ -38,7 +38,7 @@ bool JSPluginsContainer::add(const QString &fName){
             JSPluginsLoader ldr(in.readAll());
             const QStringList plgNames = ldr.names();
 
-            foreach(const QString &name, plgNames){
+            for(auto name : plgNames){
                 plugins.insert(std::make_pair(name, fName));
             }
 

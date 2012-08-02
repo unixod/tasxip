@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef MAINWINDOW_H
@@ -23,7 +23,13 @@
 
 #include <QMainWindow>
 #include <QtNetwork>
-#include "rangeset.h"
+#include "dataparser.h"
+
+
+class QNetworkAccessManager;
+class QNetworkRequest;
+class QNetworkReply;
+class QAbstractButton;
 
 class PluginsProvider;
 class Plugin;
@@ -31,12 +37,6 @@ class Plugin;
 namespace Ui {
     class MainWindow;
 }
-
-class QNetworkAccessManager;
-class QNetworkRequest;
-class QNetworkReply;
-class DataParser;
-class QAbstractButton;
 
 
 class MainWindow : public QMainWindow{
@@ -84,11 +84,9 @@ private:
 
     QNetworkAccessManager *nam;
     QNetworkRequest *req;
-    QByteArray req_params;
+    QByteArray reqParams;
 
-    DataParser *dataParser;
-    RangeSet<unsigned int> ipr;
-
+    DataParser dataParser;
     PluginsProvider *plugins;
     std::pair<int, Plugin*> prevLoadedPlugin;
 };

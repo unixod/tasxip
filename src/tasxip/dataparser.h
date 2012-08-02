@@ -15,32 +15,30 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
-  DataParser - parse ip's ranges from input data stream;
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef DATAPARSER_H
 #define DATAPARSER_H
 
-#include <QIODevice>
+#include <QList>
+#include "uau/rangeset.h"
 
-template<class> class RangeSet;
+class QIODevice;
 
 class DataParser{
-    RangeSet<unsigned int> *ipr;
-    int parsedCnt;
-    int resultCnt;
 public:
-    DataParser(RangeSet<unsigned int> *iprs);
-//    ~DataParser();
+    typedef unsigned int IPBound;
+    typedef std::pair<IPBound, IPBound> IPRange;
 
+    void parse(QIODevice *);
+    QList<IPRange> result() const;
     int resultCount() const;
     int parsedCount() const;
 
-    void parse(QIODevice *);
+private:
+    uau::RangeSet<IPBound, QList> ipr;
+    int parsedCnt;
 };
 
 #endif // DATAPARSER_H

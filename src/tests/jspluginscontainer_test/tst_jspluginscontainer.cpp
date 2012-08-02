@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <QtCore/QString>
@@ -26,7 +26,7 @@
 
 class JSPluginsContainer_Test : public QObject{
     Q_OBJECT
-    QStringList plugins;
+    QStringList plgModules;
     JSPluginsContainer container;
 public:
     JSPluginsContainer_Test();
@@ -39,14 +39,14 @@ private Q_SLOTS:
 };
 
 JSPluginsContainer_Test::JSPluginsContainer_Test(){
-    plugins << ":/plugins/minimum_plg.js"       //Minimum required plugin
+    plgModules << ":/plugins/minimum_plg.js"    //Minimum required plugin
                << ":/plugins/multi_plg.js";     //Multi-plugin
 }
 
 //Test cases---------------------------------------------------------------------------------------
 void JSPluginsContainer_Test::initTestCase(){
-    foreach(const QString &plugin, plugins){
-        QVERIFY(container.add(plugin));
+    for(auto module : plgModules){
+        QVERIFY(container.add(module));
     }
 }
 
@@ -55,24 +55,24 @@ void JSPluginsContainer_Test::cleanupTestCase(){
 
 void JSPluginsContainer_Test::names_test(){
     //loading plugins names by reading test-time plugin_names var from scripts
-    QStringList plugin_names;
-    foreach(const QString &plugin, plugins){
+    QStringList plgNamesProp;
+    for(auto module : plgModules){
         QScriptEngine en;
-        QFile f(plugin);
+        QFile f(module);
         f.open(QIODevice::ReadOnly);
         en.evaluate(f.readAll());
-        plugin_names << qscriptvalue_cast<QStringList>(en.globalObject().property("plugin_names"));
+        plgNamesProp << qscriptvalue_cast<QStringList>(en.globalObject().property("plugin_names"));
     }
 
-    QStringList names = container.names();
-    names.sort();
-    plugin_names.sort();
-    QVERIFY(names == plugin_names);
+    QStringList plgNames = container.names();
+    plgNames.sort();
+    plgNamesProp.sort();
+    QVERIFY(plgNames == plgNamesProp);
 }
 
 void JSPluginsContainer_Test::load_test(){
-    QStringList plg_names = container.names();
-    foreach(const QString &name, plg_names){
+    QStringList plgNames = container.names();
+    for(auto name : plgNames){
         Plugin *plg = container.load(name);
         QVERIFY2(plg->name() == name, QString("%1 != %2").arg(plg->name()).arg(name).toUtf8());
         delete plg;

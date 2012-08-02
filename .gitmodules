@@ -1,0 +1,3 @@
+[submodule "src/uau"]
+	path = src/uau
+	url = git://github.com/unixod/uau.git

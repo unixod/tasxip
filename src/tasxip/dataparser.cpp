@@ -15,24 +15,17 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "dataparser.h"
-#include "rangeset.h"
 #include <QRegExp>
 #include <QFile>
 #include <QTextStream>
 
-DataParser::DataParser(RangeSet<unsigned int> *iprs) : ipr(iprs), parsedCnt(0){}
-
-//DataParser::~DataParser(){
-//    delete ipr;
-//}
-
 void DataParser::parse(QIODevice *data){
     QRegExp rx("^[^0-9]{3}(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})(\\/(\\d{1,2}))?", Qt::CaseInsensitive);
-    ipr->init(0x00000000, 0xffffffff);
+    ipr.assign_range(0x00000000, 0xffffffff);
 
     QTextStream ds(data);
     QString ln;
@@ -53,13 +46,17 @@ void DataParser::parse(QIODevice *data){
 
             ++parsedCnt;
 
-            ipr->exclude(ip, ip+range);
+            ipr.exclude(ip, ip+range);
         }
     }
 }
 
+QList<DataParser::IPRange> DataParser::result() const {
+    return ipr;
+}
+
 int DataParser::resultCount() const {
-    return  ipr->size();
+    return  ipr.size();
 }
 
 int DataParser::parsedCount() const {

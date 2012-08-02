@@ -23,6 +23,12 @@ set(QT_USE_QTSCRIPT TRUE)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 set(EXTRA_LIBS ${QT_LIBRARIES})
+
+#======================================================================#
+# UAU library (https://github.com/unixod/uau)
+#======================================================================#
+include_directories(../uau)
+
 #----------------------------------------------------------------------#
 
 set(tasxip_SOURCES
@@ -40,7 +46,6 @@ set(tasxip_SOURCES
 
 set(tasxip_HEADERS
 	dataparser.h
-	ipv6rangeset.h
 	jsplugin.h
 	jspluginscontainer.h
 	jspluginsloader.h
@@ -49,7 +54,6 @@ set(tasxip_HEADERS
 	plugininfodlg.h
 	pluginsengine.h
 	pluginsprovider.h
-	rangeset.h
     settings.h
 )
 

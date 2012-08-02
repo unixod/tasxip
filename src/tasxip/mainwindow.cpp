@@ -15,12 +15,11 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dataparser.h"
 #include "pluginsprovider.h"
 #include "plugin.h"
 #include "plugininfodlg.h"
@@ -32,8 +31,6 @@ MainWindow::MainWindow(PluginsProvider *plgProvider, QWidget *parent) :
     plugins(plgProvider)
 {
     ui->setupUi(this);
-
-    dataParser = new DataParser(&ipr);
 
     //Ui Setup
     uiSetup();
@@ -49,7 +46,6 @@ MainWindow::~MainWindow(){
     netCleanup();
 
     delete ui;
-    delete dataParser;
     delete prevLoadedPlugin.second;
 }
 
@@ -58,7 +54,7 @@ void MainWindow::uiSetup(){
     QStringList names = plugins->names();
     QString tmp;
     int idx;
-    foreach(const QString &name, names){
+    for(auto name : names){
         if(name != tmp)
             idx = 0;
         else
@@ -186,8 +182,8 @@ void MainWindow::on_btnbxSettings_clicked(QAbstractButton * button){
 
 void MainWindow::sltToolBarActions(QAction *action){
     if(action->isChecked()){
-        QList<QAction *> lst_a = ui->mainToolBar->actions();
-        foreach(QAction *a, lst_a){
+        QList<QAction *> lstActions = ui->mainToolBar->actions();
+        for(auto a : lstActions){
             if(a != action) a->setChecked(false);
         }
     }

@@ -15,18 +15,17 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "jsplugin.h"
 #include "jspluginsloader.h"
-#include "ipv6rangeset.h"
 #include <QString>
 #include <QFile>
 #include <QTextStream>
 
 Q_DECLARE_METATYPE(JSPlugin*)
-Q_DECLARE_METATYPE(IPv6RangeSet)
+Q_DECLARE_METATYPE(JSPlugin::IPv6RangeSet)
 
 
 /*

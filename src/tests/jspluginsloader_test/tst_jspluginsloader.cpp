@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <QtCore/QString>
@@ -56,22 +56,22 @@ void JSPluginsLoader_Test::addPlugin(const QString &plg_name){
 
 //Test cases---------------------------------------------------------------------------------------
 void JSPluginsLoader_Test::names_test(){
-    foreach(const QString &plugin, plugins){
+    for(auto plugin : plugins){
         JSPluginsLoader ldr(plugin);
-        QStringList plugin_names = qscriptvalue_cast<QStringList>(ldr.engine()->globalObject().property("plugin_names"));
+        QStringList plgNamesProp = qscriptvalue_cast<QStringList>(ldr.engine()->globalObject().property("plugin_names"));
 
-        QCOMPARE(ldr.names(), plugin_names);
+        QCOMPARE(ldr.names(), plgNamesProp);
     }
 }
 
 void JSPluginsLoader_Test::load_test(){
-    foreach(const QString &plugin, plugins){
+    for(auto plugin : plugins){
         JSPluginsLoader ldr(plugin);
-        QStringList plugin_names = qscriptvalue_cast<QStringList>(ldr.engine()->globalObject().property("plugin_names"));
+        QStringList plgNames = qscriptvalue_cast<QStringList>(ldr.engine()->globalObject().property("plugin_names"));
 
-        foreach(const QString &name, plugin_names){
-            QString plg_name = ldr.load(name).property("name").toString();
-            QCOMPARE(plg_name, name);
+        for(auto name : plgNames){
+            QString nameProp = ldr.load(name).property("name").toString();
+            QCOMPARE(nameProp, name);
         }
     }
 }

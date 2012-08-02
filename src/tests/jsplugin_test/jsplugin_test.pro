@@ -30,3 +30,7 @@ RESOURCES += resources.qrc \
 #OTHER_FILES += \
 #    minimum_plg.js \
 #    multi_plg.js
+
+INCLUDEPATH += $$PWD/../../uau
+DEPENDPATH += $$PWD/../../uau
+QMAKE_CXXFLAGS += -std=c++0x

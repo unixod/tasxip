@@ -44,6 +44,14 @@ Plugins location is:
 		or
 	{EXECUTABLE_BIN_PATH}/plugins
 
+### BUILDING ###
+
+1) Clone this repository with --recursive option:
+
+    git clone --recursive git://github.com/unixod/tasxip.git
+
+2) Follow the steps described in the BUILD file.
+
   ___   __
   //_/\// 
 _// _//\\
