@@ -58,8 +58,8 @@
     }
   @endcode
 */
-class Settings : public QObject{
-    Q_OBJECT
+class Settings{
+    Q_GADGET
     Q_ENUMS(Section)
     Q_ENUMS(Key)
 public:
