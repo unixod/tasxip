@@ -47,9 +47,9 @@ Settings::ValueRef Settings::set(Key k, Section s){
 void Settings::setDefaults(const QString &str){
     Settings &self = instance();
 
-    //section/key : value
-    //section - optional
-    QRegExp rxRecord("^\\s*(((\\w+)/)?(\\w+))\\s*:\\s*([^\\s].+)$");
+    // section/key : value;
+    // section - optional
+    QRegExp rxRecord("^\\s*(((\\w+)/)?(\\w+))\\s*:\\s*([^\\s].{0,})\\b\\s*$");
 
     auto kvs = str.split(QRegExp(";\\W*"), QString::SkipEmptyParts); //key-values
     for(auto kv : kvs){
