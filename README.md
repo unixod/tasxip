@@ -87,7 +87,7 @@ The search path for **TasXIP** plugins is:
    * {EXECUTABLE_BIN_PATH}/plugins
 
 
-## BUILDING
+## Building
 
    1. Clone this repository with --recursive option:
 

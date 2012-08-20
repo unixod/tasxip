@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     //Loading plugis
     PluginsProvider *plgProvider;
     for(auto dir : pluginsDirSearchPaths){
-        if(plgProvider = getPluginsProvider(dir + "/" + pluginsDir)){
+        if((plgProvider = getPluginsProvider(dir + "/" + pluginsDir))){
             pluginsDir.prepend(dir + "/");
             break;
         }

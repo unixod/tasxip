@@ -43,8 +43,8 @@ bool JSPluginsContainer::add(const QString &fName){
             }
 
             ret = !plgNames.isEmpty();
-        } catch(QString error) {
-            qDebug() << error;
+        } catch(const JSPluginsLoader::JSError &error) {
+            qDebug() << error.what();
         }
     }
 
@@ -65,7 +65,7 @@ Plugin * JSPluginsContainer::load(const QString &name, int idx){
 
     int plgIdx = 0;
     for(std::map<QString, int> idxInFile; (i != end) && idx--; ++i)
-        if(plgIdx = idxInFile[i->second]) ++plgIdx;
+        if((plgIdx = idxInFile[i->second])) ++plgIdx;
 
     return (i != end) ? new JSPlugin(i->second, name, plgIdx) : 0;
     /*QStringList plg_files = plugins.values(name);

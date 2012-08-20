@@ -23,13 +23,21 @@
 
 #include <QString>
 #include <QScriptEngine>
+#include <stdexcept>
 
 /*
   WARNING: don't change current engine context, when using loader
 */
 class JSPluginsLoader{
 public:
-    JSPluginsLoader(const QScriptProgram &plugin) throw(QString);
+    class JSError : public std::runtime_error{
+    public:
+        JSError(int /*line*/, const QString &/*val*/);
+        virtual ~JSError() throw(){};
+    };
+
+public:
+    JSPluginsLoader(const QScriptProgram &plugin) throw(JSError);
     QStringList names() const;                      //gettings available plugins names
     QScriptValue load(const QString &name, int idx = 0) const;   //getting plugin by name
     QScriptEngine * engine(){return &eng;}

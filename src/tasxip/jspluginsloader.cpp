@@ -25,7 +25,7 @@
 
 QString JSPluginsLoader::loader;
 
-JSPluginsLoader::JSPluginsLoader(const QScriptProgram &plugin) throw(QString){
+JSPluginsLoader::JSPluginsLoader(const QScriptProgram &plugin) throw(JSError){
     if(loader.isEmpty()){
         QFile ldr(":/jshelper/jspluginsloader.js");
         ldr.open(QIODevice::ReadOnly);
@@ -34,8 +34,7 @@ JSPluginsLoader::JSPluginsLoader(const QScriptProgram &plugin) throw(QString){
     eng.evaluate(loader);
     eng.evaluate(plugin);
     if(eng.hasUncaughtException()){
-        int line = eng.uncaughtExceptionLineNumber();
-        throw QString("uncaught exception at line %1: %2").arg(line).arg(eng.uncaughtException().toString());
+        throw JSError(eng.uncaughtExceptionLineNumber(), eng.uncaughtException().toString());
     }
 }
 
@@ -57,3 +56,8 @@ QScriptValue JSPluginsLoader::load(const QString &name, int idx) const {
     QScriptValue plugin = jsLdr.property("load").call(jsLdr, args);                     //var plugin = jsldr.load(name);
     return plugin;
 }
+
+
+//JSPluginsLoader::JSError-----------------------------------------------------
+JSPluginsLoader::JSError::JSError(int line, const QString &err) :
+    std::runtime_error(QString("js-error at line %1:\t%2").arg(line).arg(err).toStdString()){}
